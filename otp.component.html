@@ -1,0 +1,67 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Card Component -->
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <h4 class="card-title text-center mb-4">OTP Verification</h4>
+
+          <!-- Messages for errors and success (Displayed above the form fields) -->
+          <div *ngIf="errorMessage || successMessage" class="alert-container mb-4">
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+            <div *ngIf="successMessage" class="alert alert-success">
+              {{ successMessage }}
+            </div>
+          </div>
+
+          <form [formGroup]="otpForm">
+            <!-- Email Input Field -->
+            <div class="form-group mb-3">
+              <label for="email">Email:</label>
+              <input id="email" formControlName="email" type="email" class="form-control" placeholder="Enter your email" (blur)="onEmailBlur()" />
+              <!-- Error messages for the email field -->
+              <div *ngIf="emailControl?.hasError('required') && emailControl?.touched" class="text-danger mt-1">
+                Email is required.
+              </div>
+              <div *ngIf="emailControl?.hasError('email') && emailControl?.touched" class="text-danger mt-1">
+                Invalid email format.
+              </div>
+              <div *ngIf="emailControl?.hasError('domainInvalid') && emailControl?.touched" class="text-danger mt-1">
+                Only ".dso.org.sg" domain is allowed.
+              </div>
+            </div>
+
+            <!-- Send OTP Button -->
+            <div class="form-group mb-3">
+              <button type="button" class="btn btn-primary w-100" (click)="onSendOtp()" [disabled]="!otpForm.get('email')?.valid || otpSent">
+                Send OTP
+              </button>
+            </div>
+
+            <!-- OTP Input Field -->
+            <div class="form-group mb-3">
+              <label for="otp">OTP:</label>
+              <input id="otp" formControlName="otp" type="text" class="form-control" placeholder="Enter OTP" />
+              <!-- Error messages for the OTP field -->
+              <div *ngIf="otpControl?.hasError('required') && otpControl?.touched" class="text-danger mt-1">
+                OTP is required.
+              </div>
+              <div *ngIf="otpControl?.hasError('pattern') && otpControl?.touched" class="text-danger mt-1">
+                OTP must be a 6-digit number.
+              </div>
+            </div>
+
+            <!-- Verify OTP Button -->
+            <div class="form-group mb-3">
+              <button type="button" class="btn btn-success w-100" (click)="onVerifyOtp()" [disabled]="!otpSent">
+                Verify OTP
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
